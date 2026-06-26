@@ -1,0 +1,23 @@
+<div class="page-container">
+  <h1>Registro de Usuario</h1>
+  <form [formGroup]="registroForm" (ngSubmit)="onRegistro()" class="form-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Usuario</mat-label>
+      <input matInput formControlName="username" placeholder="Nombre de usuario">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" placeholder="Correo electrónico">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Contraseña</mat-label>
+      <input matInput formControlName="password" type="password" placeholder="Mínimo 8 caracteres">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="registroForm.invalid">
+      Registrarse
+    </button>
+  </form>
+</div>
