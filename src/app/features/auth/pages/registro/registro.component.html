@@ -2,8 +2,13 @@
   <h1>Registro de Usuario</h1>
   <form [formGroup]="registroForm" (ngSubmit)="onRegistro()" class="form-container">
     <mat-form-field appearance="fill">
-      <mat-label>Usuario</mat-label>
-      <input matInput formControlName="username" placeholder="Nombre de usuario">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Nombre de usuario">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="apellido" placeholder="Apellido de usuario">
     </mat-form-field>
 
     <mat-form-field appearance="fill">

@@ -20,7 +20,8 @@ export class RegistroComponent {
   private router = inject(Router);
 
   registroForm: FormGroup = this.fb.group({
-    username: ['', Validators.required],
+    nombre: ['', Validators.required],
+    apellido: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });

@@ -37,6 +37,12 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/pages/dashboard-org/dashboard-org.component').then(m => m.DashboardOrgComponent)
   },
 
+  //Ruta del perfil
+  {
+    path: 'perfil',
+    loadComponent: () => import('./features/asistente/perfil/perfil.component').then(m => m.PerfilComponent)
+  },
+
   // Comodín
   { path: '**', redirectTo: '' }
 ];

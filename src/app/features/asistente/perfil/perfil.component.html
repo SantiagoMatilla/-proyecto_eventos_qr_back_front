@@ -1,0 +1,71 @@
+
+
+<div class="perfil-container" *ngIf="usuario">
+  <h1>Mi Perfil</h1>
+
+  <div class="avatar-section">
+    <div class="avatar-wrapper">
+      <img [src]="avatarPreview ? avatarPreview : 'assets/default-avatar.png'" alt="Avatar">
+    </div>
+
+    <div class="avatar-actions">
+      <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">
+        <mat-icon>cloud_upload</mat-icon> Cambiar Foto
+      </button>
+
+      <button mat-raised-button color="accent" *ngIf="imagenSeleccionada" (click)="guardarAvatar()" class="btn-guardar-avatar">
+        <mat-icon>check</mat-icon> Confirmar Nueva Foto
+      </button>
+    </div>
+
+    <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+  </div>
+
+  <div class="forms-grid">
+    <mat-form-field appearance="outline" class="readonly-field">
+      <mat-label>Email (No editable)</mat-label>
+      <input matInput [value]="usuario.email" readonly>
+    </mat-form-field>
+
+    <form [formGroup]="perfilForm" (ngSubmit)="onActualizarPerfil()" class="perfil-form">
+      <h3>Datos Personales</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Apellido</mat-label>
+        <input matInput formControlName="apellido">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono">
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="perfilForm.invalid">
+        Guardar Cambios
+      </button>
+    </form>
+
+    <form [formGroup]="passwordForm" (ngSubmit)="onCambiarPassword()" class="password-form">
+      <h3>Cambiar Contraseña</h3>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña Actual</mat-label>
+        <input matInput type="password" formControlName="passwordActual">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nueva Contraseña</mat-label>
+        <input matInput type="password" formControlName="nuevaPassword">
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" type="submit" [disabled]="passwordForm.invalid">
+        Actualizar Contraseña
+      </button>
+    </form>
+  </div>
+</div>+
