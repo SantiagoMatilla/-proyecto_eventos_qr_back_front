@@ -1,0 +1,48 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2c3e50; /* Color azul oscuro/grisáceo */
+  color: #ffffff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 2rem; /* Separa el navbar del contenido de abajo */
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .menu {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+
+    a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #3498db; /* Azul claro al pasar el ratón */
+      }
+    }
+
+    .btn-logout {
+      background-color: #e74c3c; /* Rojo para el botón de salir */
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #c0392b; /* Rojo más oscuro al pasar el ratón */
+      }
+    }
+  }
+}

@@ -11,15 +11,13 @@ export class AuthService {
   private storageService = inject(StorageService);
   private apiUrl = 'http://localhost:8080/api/auth';
 
-  // Signal para almacenar el usuario actual en memoria de manera reactiva
   currentUser = signal<any | null>(this.storageService.getUser());
 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap((res) => {
-        // Guardamos los tokens y los datos de usuario que provienen de tu AuthResponse
         this.storageService.saveTokens(res.accessToken, res.refreshToken);
-        const user = { email: res.email, rol: res.rol };
+        const user = { email: res.email, rol: res.rol, avatarUrl: res.avatarUrl };
         this.storageService.saveUser(user);
         this.currentUser.set(user);
       }),
@@ -30,11 +28,19 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
       tap((res) => {
         this.storageService.saveTokens(res.accessToken, res.refreshToken);
-        const user = { email: res.email, rol: res.rol };
+        const user = { email: res.email, rol: res.rol, avatarUrl: res.avatarUrl };
         this.storageService.saveUser(user);
         this.currentUser.set(user);
       }),
     );
+  }
+
+  // NUEVO MÉTODO: Sincroniza el usuario local y el Signal al cambiar perfil o foto
+  actualizarDatosUsuario(datosNuevos: any): void {
+    const usuarioActual = this.storageService.getUser() || {};
+    const usuarioActualizado = { ...usuarioActual, ...datosNuevos };
+    this.storageService.saveUser(usuarioActualizado);
+    this.currentUser.set(usuarioActualizado);
   }
 
   logout(): void {

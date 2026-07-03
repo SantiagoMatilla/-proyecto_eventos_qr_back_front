@@ -27,6 +27,8 @@
       <input matInput [value]="usuario.email" readonly>
     </mat-form-field>
 
+
+
     <form [formGroup]="perfilForm" (ngSubmit)="onActualizarPerfil()" class="perfil-form">
       <h3>Datos Personales</h3>
 
@@ -63,9 +65,18 @@
         <input matInput type="password" formControlName="nuevaPassword">
       </mat-form-field>
 
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirmar Nueva Contraseña</mat-label>
+        <input matInput type="password" formControlName="nuevaPasswordConfirm">
+        <mat-error *ngIf="passwordForm.get('nuevaPasswordConfirm')?.hasError('noCoincide')">
+          Las contraseñas no coinciden
+        </mat-error>
+      </mat-form-field>
+
       <button mat-raised-button color="warn" type="submit" [disabled]="passwordForm.invalid">
         Actualizar Contraseña
       </button>
     </form>
   </div>
-</div>+
+</div>

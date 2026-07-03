@@ -6,14 +6,14 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const storageService = inject(StorageService);
   const token = storageService.getAccessToken();
 
-  // 🕵️‍♂️ TEST 1: ¿El interceptor se despierta cuando pides el perfil?
-  console.log('=== [INTERCEPTOR] Intentando interceptar petición a:', req.url);
+  // Si la petición va dirigida a la carpeta de archivos estáticos (imágenes),
+  // enviamos la petición limpia para evitar errores de bloqueo de respuesta.
+  if (req.url.includes('/uploads/')) {
+    return next(req);
+  }
 
-  // 🕵️‍♂️ TEST 2: ¿Qué está leyendo realmente del Storage?
-  console.log('=== [INTERCEPTOR] Token recuperado:', token);
-
+  // Si hay token, inyectamos la cabecera Authorization
   if (token) {
-    console.log('=== [INTERCEPTOR] ¡Token encontrado! Inyectando cabecera...');
     const authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`,
@@ -22,6 +22,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq);
   }
 
-  console.warn('=== [INTERCEPTOR] Ojo: No hay token, la petición se envía limpia.');
+  // Si no hay token, enviamos la petición sin cabeceras
   return next(req);
 };

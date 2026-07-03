@@ -1,1 +1,17 @@
-<p>navbar works!</p>
+<nav class="navbar">
+  <div class="logo">MiApp Eventos</div>
+
+  <div class="menu">
+    <!-- Si hay usuario logueado -->
+    <ng-container *ngIf="currentUser()">
+      <a routerLink="/perfil">Mi Perfil</a>
+      <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+    </ng-container>
+
+    <!-- Si NO hay usuario -->
+    <ng-container *ngIf="!currentUser()">
+      <a routerLink="/login">Login</a>
+      <a routerLink="/register">Registro</a>
+    </ng-container>
+  </div>
+</nav>

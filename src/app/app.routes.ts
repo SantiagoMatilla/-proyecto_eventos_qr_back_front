@@ -40,7 +40,8 @@ export const routes: Routes = [
   //Ruta del perfil
   {
     path: 'perfil',
-    loadComponent: () => import('./features/asistente/perfil/perfil.component').then(m => m.PerfilComponent)
+    loadComponent: () => import('./features/asistente/perfil/perfil.component').then(m => m.PerfilComponent),
+    canActivate: [authGuard]
   },
 
   // Comodín

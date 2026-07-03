@@ -11,7 +11,8 @@ export class UsuarioService {
   private apiUrl = 'http://localhost:8080/api/usuarios';
 
   getPerfil(): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.apiUrl}/me`);
+    // CORRECCIÓN: Añadimos un timestamp para evitar que el navegador devuelva la caché vieja al pulsar F5
+    return this.http.get<Usuario>(`${this.apiUrl}/me?t=${new Date().getTime()}`);
   }
 
   actualizarPerfil(datos: {
