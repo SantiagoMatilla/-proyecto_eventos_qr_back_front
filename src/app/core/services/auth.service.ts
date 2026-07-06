@@ -35,6 +35,14 @@ export class AuthService {
     );
   }
 
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(datos: { token: string; nuevaPassword: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/reset-password`, datos);
+  }
+
   // NUEVO MÉTODO: Sincroniza el usuario local y el Signal al cambiar perfil o foto
   actualizarDatosUsuario(datosNuevos: any): void {
     const usuarioActual = this.storageService.getUser() || {};

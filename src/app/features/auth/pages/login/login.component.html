@@ -20,6 +20,10 @@
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">La contraseña es obligatoria</mat-error>
         </mat-form-field>
 
+        <div class="forgot-password-link">
+          <a routerLink="/forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
         <div class="error-msg" *ngIf="errorMensaje">{{ errorMensaje }}</div>
 
         <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="loginForm.invalid">
