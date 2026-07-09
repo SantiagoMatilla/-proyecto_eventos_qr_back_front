@@ -47,6 +47,12 @@ export class PerfilComponent implements OnInit {
   ngOnInit(): void {
     this.initForms();
     this.cargarPerfil();
+
+    // El navegador autorrellena "Contraseña Actual" aunque esto no sea un login.
+    // La vaciamos justo después de que termine de autorrellenar.
+    setTimeout(() => {
+      this.passwordForm.get('passwordActual')?.setValue('');
+    }, 100);
   }
 
   private initForms(): void {

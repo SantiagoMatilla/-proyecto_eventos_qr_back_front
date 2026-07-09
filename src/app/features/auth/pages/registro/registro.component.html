@@ -1,25 +1,33 @@
 <div class="page-container">
   <h1>Registro de Usuario</h1>
   <form [formGroup]="registroForm" (ngSubmit)="onRegistro()" class="form-container">
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre" placeholder="Nombre de usuario">
+      <input matInput formControlName="nombre" placeholder="Nombre de usuario" autocomplete="given-name">
+      <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">El nombre es obligatorio</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>Apellido</mat-label>
-      <input matInput formControlName="apellido" placeholder="Apellido de usuario">
+      <input matInput formControlName="apellido" placeholder="Apellido de usuario" autocomplete="family-name">
+      <mat-error *ngIf="registroForm.get('apellido')?.hasError('required')">El apellido es obligatorio</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email" placeholder="Correo electrónico">
+      <input matInput formControlName="email" type="email" placeholder="Correo electrónico" autocomplete="email">
+      <mat-error *ngIf="registroForm.get('email')?.hasError('required')">El email es obligatorio</mat-error>
+      <mat-error *ngIf="registroForm.get('email')?.hasError('email')">Formato de email inválido</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>Contraseña</mat-label>
-      <input matInput formControlName="password" type="password" placeholder="Mínimo 8 caracteres">
+      <input matInput formControlName="password" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+      <mat-error *ngIf="registroForm.get('password')?.hasError('required')">La contraseña es obligatoria</mat-error>
+      <mat-error *ngIf="registroForm.get('password')?.hasError('minlength')">Mínimo 8 caracteres</mat-error>
     </mat-form-field>
+
+    <div class="error-msg" *ngIf="errorMensaje">{{ errorMensaje }}</div>
 
     <button mat-raised-button color="primary" type="submit" [disabled]="registroForm.invalid">
       Registrarse

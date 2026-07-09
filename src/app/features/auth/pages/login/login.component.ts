@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -28,24 +28,33 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  @ViewChild('loginFormEl') formElement!: ElementRef<HTMLFormElement>;
+
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', Validators.required],
   });
 
-  errorMensaje: string = '';
+  errorMensaje = signal('');
 
   onSubmit() {
+    const datosNativos = new FormData(this.formElement.nativeElement);
+    const email = (datosNativos.get('email') as string) ?? '';
+    const password = (datosNativos.get('password') as string) ?? '';
+
+    this.loginForm.patchValue({ email, password });
+    this.loginForm.markAllAsTouched();
+
     if (this.loginForm.invalid) return;
 
+    this.errorMensaje.set('');
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        // Si el login es exitoso, lo mandamos a la pantalla principal
         this.router.navigate(['/']);
       },
       error: (err) => {
-        this.errorMensaje = 'Credenciales incorrectas. Vuelve a intentarlo.';
-        console.error(err);
+        this.errorMensaje.set('Credenciales incorrectas. Vuelve a intentarlo.');
+        //console.error(err);
       },
     });
   }

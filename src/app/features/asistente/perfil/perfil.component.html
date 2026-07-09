@@ -1,5 +1,3 @@
-
-
 <div class="perfil-container" *ngIf="usuario">
   <h1>Mi Perfil</h1>
 
@@ -57,18 +55,20 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Contraseña Actual</mat-label>
-        <input matInput type="password" formControlName="passwordActual">
+        <input matInput type="password" formControlName="passwordActual" autocomplete="current-password">
+        <mat-error *ngIf="passwordForm.get('passwordActual')?.hasError('required')">Este campo es obligatorio</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Nueva Contraseña</mat-label>
-        <input matInput type="password" formControlName="nuevaPassword">
+        <input matInput type="password" formControlName="nuevaPassword" autocomplete="new-password">
+        <mat-error *ngIf="passwordForm.get('nuevaPassword')?.hasError('required')">Este campo es obligatorio</mat-error>
+        <mat-error *ngIf="passwordForm.get('nuevaPassword')?.hasError('minlength')">Mínimo 8 caracteres</mat-error>
       </mat-form-field>
-
 
       <mat-form-field appearance="outline">
         <mat-label>Confirmar Nueva Contraseña</mat-label>
-        <input matInput type="password" formControlName="nuevaPasswordConfirm">
+        <input matInput type="password" formControlName="nuevaPasswordConfirm" autocomplete="new-password">
         <mat-error *ngIf="passwordForm.get('nuevaPasswordConfirm')?.hasError('noCoincide')">
           Las contraseñas no coinciden
         </mat-error>

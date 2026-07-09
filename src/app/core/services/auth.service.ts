@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { StorageService } from './storage.service';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,11 @@ export class AuthService {
   currentUser = signal<any | null>(this.storageService.getUser());
 
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((res) => {
-        this.storageService.saveTokens(res.accessToken, res.refreshToken);
-        const user = { email: res.email, rol: res.rol, avatarUrl: res.avatarUrl };
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/login`, credentials).pipe(
+      map((res) => res.data),
+      tap((data) => {
+        this.storageService.saveTokens(data.accessToken, data.refreshToken);
+        const user = { email: data.email, rol: data.rol, avatarUrl: data.avatarUrl };
         this.storageService.saveUser(user);
         this.currentUser.set(user);
       }),
@@ -25,10 +27,11 @@ export class AuthService {
   }
 
   registrar(userData: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, userData).pipe(
-      tap((res) => {
-        this.storageService.saveTokens(res.accessToken, res.refreshToken);
-        const user = { email: res.email, rol: res.rol, avatarUrl: res.avatarUrl };
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/register`, userData).pipe(
+      map((res) => res.data),
+      tap((data) => {
+        this.storageService.saveTokens(data.accessToken, data.refreshToken);
+        const user = { email: data.email, rol: data.rol, avatarUrl: data.avatarUrl };
         this.storageService.saveUser(user);
         this.currentUser.set(user);
       }),
@@ -36,14 +39,17 @@ export class AuthService {
   }
 
   forgotPassword(email: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/forgot-password`, { email });
+    return this.http
+      .post<ApiResponse<any>>(`${this.apiUrl}/forgot-password`, { email })
+      .pipe(map((res) => res.data));
   }
 
   resetPassword(datos: { token: string; nuevaPassword: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reset-password`, datos);
+    return this.http
+      .post<ApiResponse<any>>(`${this.apiUrl}/reset-password`, datos)
+      .pipe(map((res) => res.data));
   }
 
-  // NUEVO MÉTODO: Sincroniza el usuario local y el Signal al cambiar perfil o foto
   actualizarDatosUsuario(datosNuevos: any): void {
     const usuarioActual = this.storageService.getUser() || {};
     const usuarioActualizado = { ...usuarioActual, ...datosNuevos };

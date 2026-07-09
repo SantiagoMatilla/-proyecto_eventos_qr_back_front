@@ -26,12 +26,20 @@ export class RegistroComponent {
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
 
+  errorMensaje: string = '';
+
   onRegistro() {
-    if (this.registroForm.valid) {
-      this.authService.registrar(this.registroForm.value).subscribe({
-        next: () => this.router.navigate(['/login']),
-        error: (err) => console.error('Error al registrar', err),
-      });
-    }
+    if (this.registroForm.invalid) return;
+
+    this.errorMensaje = '';
+
+    this.authService.registrar(this.registroForm.value).subscribe({
+      next: () => this.router.navigate(['/login']),
+      error: (err) => {
+        this.errorMensaje =
+          err.error?.message || 'No se pudo completar el registro. Inténtalo de nuevo.';
+        console.error('Error al registrar', err);
+      },
+    });
   }
 }

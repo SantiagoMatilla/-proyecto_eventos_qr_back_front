@@ -1,8 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { catchError, throwError } from 'rxjs';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
@@ -10,12 +10,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error) => {
-      // Si el servidor nos dice 401, significa que el token expiró o es inválido
-      if (error.status === 401) {
+      // Solo forzamos logout+redirect si el usuario YA tenía sesión iniciada
+      // (un 401 al intentar loguearse no es lo mismo que una sesión caducada)
+      if (error.status === 401 && authService.isLoggedIn()) {
+        console.log("Error interceptor");
         authService.logout();
         router.navigate(['/login']);
       }
       return throwError(() => error);
-    })
+    }),
   );
 };

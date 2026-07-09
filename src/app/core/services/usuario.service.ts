@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,9 @@ export class UsuarioService {
   private apiUrl = 'http://localhost:8080/api/usuarios';
 
   getPerfil(): Observable<Usuario> {
-    // CORRECCIÓN: Añadimos un timestamp para evitar que el navegador devuelva la caché vieja al pulsar F5
-    return this.http.get<Usuario>(`${this.apiUrl}/me?t=${new Date().getTime()}`);
+    return this.http
+      .get<ApiResponse<Usuario>>(`${this.apiUrl}/me?t=${new Date().getTime()}`)
+      .pipe(map((res) => res.data));
   }
 
   actualizarPerfil(datos: {
@@ -20,16 +22,22 @@ export class UsuarioService {
     apellido: string;
     telefono: string;
   }): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiUrl}/me`, datos);
+    return this.http
+      .put<ApiResponse<Usuario>>(`${this.apiUrl}/me`, datos)
+      .pipe(map((res) => res.data));
   }
 
   cambiarPassword(datos: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/me/password`, datos);
+    return this.http
+      .put<ApiResponse<any>>(`${this.apiUrl}/me/password`, datos)
+      .pipe(map((res) => res.data));
   }
 
   subirAvatar(file: File): Observable<Usuario> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post<Usuario>(`${this.apiUrl}/me/avatar`, formData);
+    return this.http
+      .post<ApiResponse<Usuario>>(`${this.apiUrl}/me/avatar`, formData)
+      .pipe(map((res) => res.data));
   }
 }

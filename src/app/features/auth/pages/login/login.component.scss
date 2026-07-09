@@ -36,14 +36,13 @@
   padding-top: 15px;
 }
 
-
 .forgot-password-link {
   text-align: right;
   margin-bottom: 15px;
   font-size: 0.85em;
 
   a {
-    color: #3f51b5; // si tu tema de Material usa otro color primario, cámbialo aquí
+    color: #3f51b5;
     text-decoration: none;
 
     &:hover {
@@ -51,5 +50,3 @@
     }
   }
 }
-
-
