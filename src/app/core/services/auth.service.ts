@@ -69,4 +69,8 @@ export class AuthService {
   hasRole(role: string): boolean {
     return this.currentUser()?.rol === role;
   }
+
+  hasAnyRole(roles: string[]): boolean {
+    return roles.includes(this.currentUser()?.rol);
+  }
 }

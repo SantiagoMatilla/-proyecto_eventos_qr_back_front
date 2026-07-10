@@ -1,14 +1,14 @@
 <nav class="navbar">
-  <div class="logo">MiApp Eventos</div>
+  <a routerLink="/" class="logo">MiApp Eventos</a>
 
   <div class="menu">
-    <!-- Si hay usuario logueado -->
     <ng-container *ngIf="currentUser()">
+      <a routerLink="/mis-tickets">Mis Tickets</a>
+      <a *ngIf="authService.hasAnyRole(['ORGANIZADOR', 'SUPER_ADMIN'])" routerLink="/organizador/dashboard">Dashboard</a>
       <a routerLink="/perfil">Mi Perfil</a>
       <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
     </ng-container>
 
-    <!-- Si NO hay usuario -->
     <ng-container *ngIf="!currentUser()">
       <a routerLink="/login">Login</a>
       <a routerLink="/registro">Registro</a>

@@ -11,7 +11,7 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrls: ['./navbar.scss'],
 })
 export class NavbarComponent {
-  private authService = inject(AuthService);
+  protected authService = inject(AuthService);
   private router = inject(Router);
 
   currentUser = this.authService.currentUser;
