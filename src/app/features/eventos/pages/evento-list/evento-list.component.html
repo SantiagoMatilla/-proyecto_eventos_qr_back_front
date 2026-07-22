@@ -1,6 +1,30 @@
 <div class="page-container">
   <h1>Catálogo de Eventos</h1>
-  <div class="content">
-    <p>Próximamente verás aquí la lista de eventos.</p>
+
+  <app-evento-filtros (filtrosCambiados)="onFiltrosCambiados($event)"></app-evento-filtros>
+
+  <div class="estado-carga" *ngIf="cargando()">
+    <mat-spinner diameter="48"></mat-spinner>
   </div>
+
+  <div class="estado-error" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="cargarEventos()">Reintentar</button>
+  </div>
+
+  <ng-container *ngIf="!cargando() && !error()">
+    <p class="sin-resultados" *ngIf="eventos().length === 0">No hay eventos disponibles ahora mismo.</p>
+
+    <div class="eventos-grid" *ngIf="eventos().length > 0">
+      <app-evento-card *ngFor="let evento of eventos()" [evento]="evento"></app-evento-card>
+    </div>
+
+    <mat-paginator
+      *ngIf="totalElementos() > 0"
+      [length]="totalElementos()"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[12, 24, 48]"
+      (page)="onCambioPagina($event)">
+    </mat-paginator>
+  </ng-container>
 </div>

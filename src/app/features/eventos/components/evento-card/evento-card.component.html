@@ -1,0 +1,16 @@
+<a [routerLink]="['/eventos', evento.id]" class="evento-card">
+  <div class="evento-card__imagen" [style.background-image]="'url(' + imagenSrc + ')'">
+    <span class="evento-card__categoria">{{ evento.categoriaNombre }}</span>
+  </div>
+
+  <div class="evento-card__contenido">
+    <h3 class="evento-card__titulo">{{ evento.titulo }}</h3>
+    <p class="evento-card__fecha">{{ evento.fechaInicio | date: 'EEEE d MMMM, HH:mm' }}</p>
+    <p class="evento-card__lugar">{{ evento.ciudad }}</p>
+
+    <div class="evento-card__footer">
+      <span class="evento-card__precio">{{ esGratis ? 'Gratis' : (evento.precio | currency: 'EUR') }}</span>
+      <span class="evento-card__plazas">{{ evento.plazasDisponibles }} plazas libres</span>
+    </div>
+  </div>
+</a>

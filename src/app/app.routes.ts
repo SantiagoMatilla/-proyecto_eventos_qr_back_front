@@ -13,6 +13,14 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'eventos/:id',
+    loadComponent: () =>
+      import('./features/eventos/pages/evento-detail/evento-detail.component').then(
+        (m) => m.EventoDetailComponent,
+      ),
+  },
+
   // Rutas de Autenticación
   {
     path: 'login',

@@ -1,0 +1,43 @@
+<div class="filtros">
+  <mat-form-field appearance="outline" class="filtros__busqueda">
+    <mat-label>Buscar eventos</mat-label>
+    <input matInput [formControl]="busquedaControl" placeholder="Título o descripción...">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filtros__ciudad">
+    <mat-label>Ciudad</mat-label>
+    <input matInput [formControl]="ciudadControl" placeholder="Ej. Madrid">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="filtros__orden">
+    <mat-label>Ordenar por</mat-label>
+    <mat-select [(value)]="ordenSeleccionado" (selectionChange)="onCambioOrden()">
+      <mat-option value="fechaInicio,asc">Próximos primero</mat-option>
+      <mat-option value="precio,asc">Precio: menor a mayor</mat-option>
+      <mat-option value="inscritos">Más inscritos</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+    <!--<p>{{categorias.length}}</p>-->
+  <mat-chip-listbox *ngIf="categorias.length > 0" [disabled]="ordenIgnoraFiltros" aria-label="Filtrar por categoría" class="filtros__chips">
+    <mat-chip-option [selected]="categoriaSeleccionada === null" (click)="seleccionarCategoria(null)">
+      Todas
+    </mat-chip-option>
+    <mat-chip-option
+      *ngFor="let categoria of categorias"
+      [selected]="categoriaSeleccionada === categoria.id"
+      (click)="seleccionarCategoria(categoria.id)">
+      {{ categoria.nombre }}
+    </mat-chip-option>
+  </mat-chip-listbox>
+
+  <mat-chip-listbox [disabled]="ordenIgnoraFiltros" aria-label="Filtrar por precio" class="filtros__chips">
+    <mat-chip-option [selected]="precioSeleccionado === 'todos'" (click)="seleccionarPrecio('todos')">Todos</mat-chip-option>
+    <mat-chip-option [selected]="precioSeleccionado === 'gratis'" (click)="seleccionarPrecio('gratis')">Gratis</mat-chip-option>
+    <mat-chip-option [selected]="precioSeleccionado === 'pago'" (click)="seleccionarPrecio('pago')">De pago</mat-chip-option>
+  </mat-chip-listbox>
+  <p class="filtros__aviso" *ngIf="ordenIgnoraFiltros">
+    "Más inscritos" no se puede combinar con el resto de filtros — se ignoran mientras esté activo.
+  </p>
+</div>

@@ -1,0 +1,57 @@
+<div class="page-container">
+  <div class="estado-carga" *ngIf="cargando()">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <div class="estado-error" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <a routerLink="/" mat-raised-button color="primary">Volver al catálogo</a>
+  </div>
+
+  <ng-container *ngIf="!cargando() && !error() && evento() as evento">
+    <a routerLink="/" class="volver-link">
+      <mat-icon>arrow_back</mat-icon> Volver al catálogo
+    </a>
+
+    <div class="evento-detail">
+      <div class="evento-detail__imagen" [style.background-image]="'url(' + imagenSrc + ')'">
+        <span class="evento-detail__categoria">{{ evento.categoriaNombre }}</span>
+      </div>
+
+      <div class="evento-detail__info">
+        <h1>{{ evento.titulo }}</h1>
+        <p class="evento-detail__organizador">Organizado por {{ evento.organizadorNombre }}</p>
+
+        <div class="evento-detail__datos">
+          <div class="dato">
+            <mat-icon>event</mat-icon>
+            <span>{{ evento.fechaInicio | date: 'EEEE d MMMM yyyy, HH:mm' }} &mdash; {{ evento.fechaFin | date: 'HH:mm' }}</span>
+          </div>
+          <div class="dato">
+            <mat-icon>place</mat-icon>
+            <span>{{ evento.lugar }}, {{ evento.direccion }}, {{ evento.ciudad }}</span>
+          </div>
+          <div class="dato">
+            <mat-icon>groups</mat-icon>
+            <span>{{ evento.plazasDisponibles }} plazas disponibles de {{ evento.aforoMaximo }}</span>
+          </div>
+          <div class="dato">
+            <mat-icon>payments</mat-icon>
+            <span>{{ esGratis ? 'Entrada gratuita' : (evento.precio | currency: 'EUR') }}</span>
+          </div>
+        </div>
+
+        <h2>Descripción</h2>
+        <p class="evento-detail__descripcion">{{ evento.descripcion }}</p>
+
+        <h2>Ubicación</h2>
+        <iframe
+          *ngIf="mapaUrl()"
+          [src]="mapaUrl()"
+          class="evento-detail__mapa"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </ng-container>
+</div>

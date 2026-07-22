@@ -1,5 +1,28 @@
 .page-container {
-  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.estado-carga,
+.estado-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  gap: 1rem;
+}
+
+.sin-resultados {
+  text-align: center;
+  color: #636e72;
+  padding: 3rem 0;
+}
+
+.eventos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
