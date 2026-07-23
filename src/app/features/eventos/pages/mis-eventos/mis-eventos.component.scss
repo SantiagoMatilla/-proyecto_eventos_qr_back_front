@@ -1,0 +1,53 @@
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  a[mat-raised-button] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+}
+
+.estado-carga,
+.estado-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0;
+  gap: 1rem;
+}
+
+.sin-resultados {
+  text-align: center;
+  color: #636e72;
+  padding: 3rem 0;
+}
+
+.tabla-eventos {
+  width: 100%;
+}
+
+.celda-acciones {
+  white-space: nowrap;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+
+  &--borrador { background-color: #dfe6e9; color: #2d3436; }
+  &--publicado { background-color: #d4efdf; color: #196f3d; }
+  &--cancelado { background-color: #fadbd8; color: #922b21; }
+  &--finalizado { background-color: #eaeded; color: #566573; }
+}

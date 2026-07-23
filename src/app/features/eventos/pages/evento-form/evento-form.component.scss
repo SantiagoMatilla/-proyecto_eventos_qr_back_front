@@ -1,0 +1,71 @@
+.page-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.estado-carga,
+.estado-error {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.evento-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.fila-fecha {
+  display: flex;
+  gap: 1rem;
+
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.campo-quill {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: #636e72;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.error-quill,
+.error-fechas,
+.error-guardado {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin: 0 0 1rem 0;
+}
+
+.campo-imagen {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: #636e72;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.imagen-preview {
+  width: 100%;
+  height: 180px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  background-color: #dfe6e9;
+}

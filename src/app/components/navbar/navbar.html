@@ -4,6 +4,8 @@
   <div class="menu">
     <ng-container *ngIf="currentUser()">
       <a routerLink="/mis-tickets">Mis Tickets</a>
+      <a *ngIf="authService.hasRole('ORGANIZADOR')" routerLink="/organizador/mis-eventos">Mis Eventos</a>
+      <a *ngIf="authService.hasAnyRole(['ORGANIZADOR', 'SUPER_ADMIN'])" routerLink="/organizador/dashboard">Dashboard</a>
       <a *ngIf="authService.hasAnyRole(['ORGANIZADOR', 'SUPER_ADMIN'])" routerLink="/organizador/dashboard">Dashboard</a>
       <a routerLink="/perfil">Mi Perfil</a>
       <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>

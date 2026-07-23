@@ -1,0 +1,83 @@
+<div class="page-container">
+  <div class="cabecera">
+    <h1>Mis Eventos</h1>
+    <a mat-raised-button color="primary" routerLink="/organizador/eventos/nuevo">
+      <mat-icon>add</mat-icon> Nuevo evento
+    </a>
+  </div>
+
+  <div class="estado-carga" *ngIf="cargando()">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <div class="estado-error" *ngIf="error()">
+    <p>{{ error() }}</p>
+    <button mat-raised-button color="primary" (click)="cargarEventos()">Reintentar</button>
+  </div>
+
+  <ng-container *ngIf="!cargando() && !error()">
+    <p class="sin-resultados" *ngIf="eventos().length === 0">Todavía no has creado ningún evento.</p>
+
+    <table mat-table [dataSource]="eventos()" *ngIf="eventos().length > 0" class="tabla-eventos">
+
+      <ng-container matColumnDef="titulo">
+        <th mat-header-cell *matHeaderCellDef>Título</th>
+        <td mat-cell *matCellDef="let evento">{{ evento.titulo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="categoria">
+        <th mat-header-cell *matHeaderCellDef>Categoría</th>
+        <td mat-cell *matCellDef="let evento">{{ evento.categoriaNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaInicio">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let evento">{{ evento.fechaInicio | date: 'd MMM yyyy, HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let evento">
+          <span class="badge" [class]="'badge--' + evento.estado.toLowerCase()">{{ etiquetaEstado(evento.estado) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="plazas">
+        <th mat-header-cell *matHeaderCellDef>Plazas</th>
+        <td mat-cell *matCellDef="let evento">{{ evento.plazasDisponibles }} / {{ evento.aforoMaximo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let evento" class="celda-acciones">
+          <a mat-icon-button [routerLink]="['/organizador/eventos', evento.id, 'editar']" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button mat-icon-button *ngIf="puedePublicar(evento)" (click)="publicar(evento)" matTooltip="Publicar" color="primary">
+            <mat-icon>publish</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="puedeCancelar(evento)" (click)="cancelar(evento)" matTooltip="Cancelar evento" color="warn">
+            <mat-icon>cancel</mat-icon>
+          </button>
+          <button mat-icon-button *ngIf="puedeEliminar(evento)" (click)="eliminar(evento)" matTooltip="Eliminar" color="warn">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button disabled matTooltip="Disponible próximamente (módulo de inscripciones)">
+            <mat-icon>groups</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    </table>
+
+    <mat-paginator
+      *ngIf="totalElementos() > pageSize"
+      [length]="totalElementos()"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[10, 25, 50]"
+      (page)="onCambioPagina($event)">
+    </mat-paginator>
+  </ng-container>
+</div>

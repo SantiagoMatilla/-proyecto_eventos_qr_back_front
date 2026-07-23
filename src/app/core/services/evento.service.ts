@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Evento } from '../models/evento.model';
+import { Evento, EstadoEvento } from '../models/evento.model';
 import { EventoFiltro } from '../models/evento-filtro.model';
+import { EventoRequest } from '../models/evento-request.model';
 import { PageResponse } from '../models/page.model';
 import { ApiResponse } from '../models/api-response.model';
 
@@ -12,6 +13,7 @@ import { ApiResponse } from '../models/api-response.model';
 export class EventoService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/eventos';
+  private misEventosUrl = 'http://localhost:8080/api/mis-eventos';
 
   listarPublico(
     filtro: EventoFiltro,
@@ -33,7 +35,42 @@ export class EventoService {
       .pipe(map((res) => res.data));
   }
 
+  misEventos(page: number = 0, size: number = 10): Observable<PageResponse<Evento>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http
+      .get<ApiResponse<PageResponse<Evento>>>(this.misEventosUrl, { params })
+      .pipe(map((res) => res.data));
+  }
+
   obtenerPorId(id: number): Observable<Evento> {
     return this.http.get<ApiResponse<Evento>>(`${this.apiUrl}/${id}`).pipe(map((res) => res.data));
+  }
+
+  crear(request: EventoRequest): Observable<Evento> {
+    return this.http.post<ApiResponse<Evento>>(this.apiUrl, request).pipe(map((res) => res.data));
+  }
+
+  editar(id: number, request: EventoRequest): Observable<Evento> {
+    return this.http
+      .put<ApiResponse<Evento>>(`${this.apiUrl}/${id}`, request)
+      .pipe(map((res) => res.data));
+  }
+
+  cambiarEstado(id: number, estado: EstadoEvento): Observable<Evento> {
+    return this.http
+      .patch<ApiResponse<Evento>>(`${this.apiUrl}/${id}/estado`, { estado })
+      .pipe(map((res) => res.data));
+  }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/${id}`).pipe(map(() => undefined));
+  }
+
+  subirImagen(id: number, file: File): Observable<Evento> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http
+      .post<ApiResponse<Evento>>(`${this.apiUrl}/${id}/imagen`, formData)
+      .pipe(map((res) => res.data));
   }
 }

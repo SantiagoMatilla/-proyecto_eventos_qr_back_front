@@ -73,6 +73,35 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'organizador/mis-eventos',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ORGANIZADOR'] },
+    loadComponent: () =>
+      import('./features/eventos/pages/mis-eventos/mis-eventos.component').then(
+        (m) => m.MisEventosComponent,
+      ),
+  },
+
+  {
+    path: 'organizador/eventos/nuevo',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ORGANIZADOR', 'SUPER_ADMIN'] },
+    loadComponent: () =>
+      import('./features/eventos/pages/evento-form/evento-form.component').then(
+        (m) => m.EventoFormComponent,
+      ),
+  },
+  {
+    path: 'organizador/eventos/:id/editar',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ORGANIZADOR', 'SUPER_ADMIN'] },
+    loadComponent: () =>
+      import('./features/eventos/pages/evento-form/evento-form.component').then(
+        (m) => m.EventoFormComponent,
+      ),
+  },
+
   //Ruta del perfil
   {
     path: 'perfil',

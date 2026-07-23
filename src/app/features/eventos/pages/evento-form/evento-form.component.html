@@ -1,0 +1,136 @@
+<div class="page-container">
+  <h1>{{ modoEdicion() ? 'Editar evento' : 'Crear nuevo evento' }}</h1>
+
+  <div class="estado-carga" *ngIf="cargandoEvento()">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <div class="estado-error" *ngIf="errorCarga()">
+    <p>{{ errorCarga() }}</p>
+  </div>
+
+  <form *ngIf="!cargandoEvento() && !errorCarga()" [formGroup]="form" (ngSubmit)="onSubmit()" class="evento-form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="titulo" maxlength="100">
+      <mat-error *ngIf="form.get('titulo')?.hasError('required')">El título es obligatorio</mat-error>
+    </mat-form-field>
+
+    <div class="campo-quill">
+      <label>Descripción</label>
+      <quill-editor formControlName="descripcion" [styles]="{ height: '200px' }"></quill-editor>
+      <p class="error-quill" *ngIf="form.get('descripcion')?.invalid && form.get('descripcion')?.touched">
+        La descripción es obligatoria
+      </p>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoriaId">
+        <mat-option *ngFor="let categoria of categorias" [value]="categoria.id">{{ categoria.nombre }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('categoriaId')?.hasError('required')">La categoría es obligatoria</mat-error>
+    </mat-form-field>
+
+    <div class="fila-fecha">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de inicio</mat-label>
+        <input matInput [matDatepicker]="pickerInicioFecha" formControlName="fechaInicioFecha">
+        <mat-datepicker-toggle matSuffix [for]="pickerInicioFecha"></mat-datepicker-toggle>
+        <mat-datepicker #pickerInicioFecha></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de inicio</mat-label>
+        <input matInput [matTimepicker]="pickerInicioHora" formControlName="fechaInicioHora">
+        <mat-timepicker-toggle matSuffix [for]="pickerInicioHora"></mat-timepicker-toggle>
+        <mat-timepicker #pickerInicioHora [interval]="'15m'"></mat-timepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="fila-fecha">
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de fin</mat-label>
+        <input matInput [matDatepicker]="pickerFinFecha" formControlName="fechaFinFecha">
+        <mat-datepicker-toggle matSuffix [for]="pickerFinFecha"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFinFecha></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Hora de fin</mat-label>
+        <input matInput [matTimepicker]="pickerFinHora" formControlName="fechaFinHora">
+        <mat-timepicker-toggle matSuffix [for]="pickerFinHora"></mat-timepicker-toggle>
+        <mat-timepicker #pickerFinHora [interval]="'15m'"></mat-timepicker>
+      </mat-form-field>
+    </div>
+    <p class="error-fechas" *ngIf="form.get('fechaFinHora')?.hasError('fechaFinInvalida')">
+      La fecha/hora de fin debe ser posterior a la de inicio
+    </p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Lugar</mat-label>
+      <input matInput formControlName="lugar">
+      <mat-error *ngIf="form.get('lugar')?.hasError('required')">El lugar es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Dirección</mat-label>
+      <input matInput formControlName="direccion">
+    </mat-form-field>
+
+    <div class="fila-fecha">
+      <mat-form-field appearance="outline">
+        <mat-label>Ciudad</mat-label>
+        <input matInput formControlName="ciudad">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Código postal</mat-label>
+        <input matInput formControlName="codigoPostal">
+      </mat-form-field>
+    </div>
+
+    <div class="fila-fecha">
+      <mat-form-field appearance="outline">
+        <mat-label>Aforo máximo</mat-label>
+        <input matInput type="number" formControlName="aforoMaximo" min="1">
+        <mat-error *ngIf="form.get('aforoMaximo')?.hasError('required')">Obligatorio</mat-error>
+        <mat-error *ngIf="form.get('aforoMaximo')?.hasError('min')">Debe ser al menos 1</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Precio (€)</mat-label>
+        <input matInput type="number" formControlName="precio" min="0" step="0.01">
+        <mat-error *ngIf="form.get('precio')?.hasError('min')">No puede ser negativo</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tipo de acceso</mat-label>
+      <mat-select formControlName="tipoAcceso">
+        <mat-option value="PUBLICO">Público</mat-option>
+        <mat-option value="PRIVADO">Privado</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="form.get('tipoAcceso')?.value === 'PRIVADO'">
+      <mat-label>Código de acceso</mat-label>
+      <input matInput formControlName="codigoAcceso" maxLength="255">
+      <mat-hint *ngIf="modoEdicion()">Déjalo en blanco para mantener el código actual</mat-hint>
+      <mat-error *ngIf="form.get('codigoAcceso')?.hasError('required')">Obligatorio para eventos privados</mat-error>
+    </mat-form-field>
+
+    <div class="campo-imagen">
+      <label>Imagen de portada</label>
+      <div class="imagen-preview" *ngIf="imagenPreview" [style.background-image]="'url(' + imagenPreview + ')'"></div>
+      <input type="file" accept="image/*" (change)="onImagenSeleccionada($event)">
+    </div>
+
+    <p class="error-guardado" *ngIf="errorGuardado()">{{ errorGuardado() }}</p>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="guardando()">
+      {{ guardando() ? 'Guardando...' : (modoEdicion() ? 'Guardar cambios' : 'Crear evento') }}
+    </button>
+  </form>
+</div>
